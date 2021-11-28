@@ -2,26 +2,8 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.195.0/containers/java
 {
 	"name": "Java",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": {
-			// Update the VARIANT arg to pick a Java version: 8, 11, 14
-			// Append -bullseye or -buster to pin to an OS version.
-			// Use the -bullseye variants on local arm64/Apple Silicon.
-			"VARIANT": "11-bullseye",
-			// Options
-			"INSTALL_MAVEN": "true",
-			"MAVEN_VERSION": "3.6.3",
-			"INSTALL_GRADLE": "false",
-			"NODE_VERSION": "lts/*"
-		}
-	},
+	"image": "openliberty/open-liberty:21.0.0.9-full-java8-ibmjava-ubi",
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": { 
-		"java.home": "/docker-java-home",
-		"maven.executable.path": "/usr/local/sdkman/candidates/maven/current/bin/mvn"
-	},
 	
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
@@ -29,7 +11,7 @@
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [9080],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
