@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: 11-bullseye
+        INSTALL_MAVEN: true
+        MAVEN_VERSION: 3.6.3
+        INSTALL_GRADLE: false
+    volumes:
+      - ..:/workspace:cached
+  db:
+    image: mariadb:10.5.8
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_password
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_user_pass
+    ports:
+      - "6033:3306"
+    volumes:
+      - maria_data:/var/lib/maria/data
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
+# Persist database information after your VM shuts down (just these two lines!)
+volumes:
+  maria_data:
