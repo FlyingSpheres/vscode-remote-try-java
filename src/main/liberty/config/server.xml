@@ -1,0 +1,39 @@
+<server description="Sample Liberty server">
+
+    <featureManager>
+        <feature>javaee-7.0</feature>
+        <feature>adminCenter-1.0</feature>
+        <feature>localConnector-1.0</feature>
+        <feature>mpMetrics-1.0</feature>
+    </featureManager>
+
+    <httpEndpoint httpPort="${default.http.port}" 
+                  httpsPort="${default.https.port}"
+                  id="defaultHttpEndpoint" host="*">
+        <accessLogging filepath="${com.ibm.ws.logging.log.directory}/accessLog.log" logFormat='%h %i %u %t "%r" %s %b %{R}W' />
+    </httpEndpoint>
+
+    <keyStore id="defaultKeyStore" password="Liberty" />
+
+    <basicRegistry id="basic" realm="ibm/api">
+        <user name="admin" password="Gu1tar00" />
+    </basicRegistry>
+    <administrator-role>
+      <user>admin</user>
+      <group>Administrator</group>
+    </administrator-role>
+
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+
+<!--    <include location="appConfXML/eventservice_jdbc.xml" />-->
+
+    <cors domain="/"
+          allowedOrigins="*"
+          allowedMethods="OPTIONS,POST,GET"
+          allowCredentials="true"
+          allowedHeaders = "origin, content-type, accept, authorization, cache-control"
+          maxAge="3600"/>
+    <applicationMonitor updateTrigger="mbean" />
+    <include location="appConfXML/config_jdbc.xml"/>
+</server>
