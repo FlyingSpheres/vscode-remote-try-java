@@ -6,11 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VARIANT: 11-bullseye
-        INSTALL_MAVEN: true
+        VARIANT: "11-bullseye"
+        INSTALL_MAVEN: "true"
         MAVEN_VERSION: 3.6.3
-        INSTALL_GRADLE: false
-        NODE_VERSION: lts/*
+        INSTALL_GRADLE: "false"
+        NODE_VERSION: "lts/*"
     volumes:
       - ..:/workspace:cached
   db:
