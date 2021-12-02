@@ -8,10 +8,10 @@
         <jdbcDriver libraryRef="MySQLLib" />
         <!-- config for Docker -->
         <properties databaseName="app_db"
-                    serverName="127.0.0.1"
+                    serverName="db"
                     portNumber="3306"
                     user="db_user"
                     password="db_user_pass"
-                    URL="jdbc:mysql://127.0.0.1:3306/app_db" />
+                    URL="jdbc:mysql://db:3306/app_db" />
     </dataSource>
 </server>

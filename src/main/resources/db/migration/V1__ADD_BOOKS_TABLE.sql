@@ -1,0 +1,10 @@
+CREATE TABLE `books` (
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `author` text NOT NULL,
+  `language` text NOT NULL,
+  `image` text DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

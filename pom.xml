@@ -23,6 +23,11 @@
         <testServerHttpsPort>9453</testServerHttpsPort>
         <warContext>${app.name}</warContext>
         <package.file>${project.build.directory}/${project.artifactId}-${project.version}.zip</package.file>
+        <db.port>3306</db.port>
+        <flyway.user>db_user</flyway.user>
+        <flyway.password>db_user_pass</flyway.password>
+        <flyway.schemas>app_db</flyway.schemas>
+        <flyway.url>jdbc:mysql://db:${db.port}/app_db</flyway.url>
     </properties>
     
     <profiles>
@@ -76,6 +81,12 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.27</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
   <build>        
@@ -89,7 +100,6 @@
             <packagingExcludes>pom.xml</packagingExcludes>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.5</version>
@@ -167,15 +177,57 @@
             </features>
             <looseApplication>false</looseApplication>
         </configuration>
-      </plugin>      
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
+      </plugin>     
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>8.2.0</version>
+        <configuration>
+            <user></user>
+            <password></password>
+            <schemas>
+                <schema></schema>
+            </schemas>
+        </configuration>
+      </plugin> 
+      <plugin>
+            <!--  https://flywaydb.org/documentation/usage/maven/migrate -->
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.0.0-M3</version>
+          <configuration>
+            <driver>com.mysql.cj.jdbc.Driver.</driver>
+            <url>jdbc:mysql://db:${db.port}/app_db</url>
+            <user>${flyway.user}</user>
+            <password>${flyway.password}</password>
+            <connectRetries>10</connectRetries>
+            <schemas>
+                <schema>${flyway.schemas}</schema>
+            </schemas>
+            <createSchemas>true</createSchemas>
+            <table>schema_history</table>
+            <tablespace>my_tablespace</tablespace>
+            <locations>
+                <location>classpath:migrations1</location>
+            </locations>
+            <!-- <sqlMigrationPrefix>Migration-</sqlMigrationPrefix>
+            <undoSqlMigrationPrefix>downgrade</undoSqlMigrationPrefix>
+            <repeatableSqlMigrationPrefix>RRR</repeatableSqlMigrationPrefix> -->
+            <sqlMigrationSeparator>__</sqlMigrationSeparator>
+            <sqlMigrationSuffixes>
+                <sqlMigrationSuffix>.sql</sqlMigrationSuffix>
+                <sqlMigrationSuffix>.pkg</sqlMigrationSuffix>
+                <sqlMigrationSuffix>.pkb</sqlMigrationSuffix>
+            </sqlMigrationSuffixes>
+            <stream>true</stream>
+            <batch>true</batch>
+            <encoding>ISO-8859-1</encoding>            
+          </configuration>
         </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        
       </plugins>
     </pluginManagement>
   </build>
